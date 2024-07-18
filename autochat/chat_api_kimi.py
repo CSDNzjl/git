@@ -2,34 +2,45 @@ import json
 import os
 import time
 from openai import OpenAI
-#频繁请求报错的异常处理
-#用户输入有选择性地加入json文件中
+
+# 频繁请求报错的异常处理
+# 用户输入有选择性地加入json文件中
 class ChatBot:
     def __init__(self, api_key, base_url):
         self.client = OpenAI(api_key=api_key, base_url=base_url)
-        self.history_path = "history.json"
+        self.history_user_path = "data/history_user_assistant.json"
+        self.history_system_path = "data/history_system.json"
         self.load_history()
 
     def load_history(self):
-        if os.path.exists(self.history_path):
-            with open(self.history_path, 'r', encoding='utf-8') as file:
-                self.history = json.load(file)
+        if os.path.exists(self.history_user_path):
+            with open(self.history_user_path, 'r', encoding='utf-8') as file:
+                self.history_user = json.load(file)
         else:
-            self.history = []
+            self.history_user = []
+
+        if os.path.exists(self.history_system_path):
+            with open(self.history_system_path, 'r', encoding='utf-8') as file:
+                self.history_system = json.load(file)
+        else:
+            self.history_system = []
 
     def save_history(self):
-        with open(self.history_path, 'w', encoding='utf-8') as file:
-            json.dump(self.history, file, ensure_ascii=False, indent=4)
+        with open(self.history_user_path, 'w', encoding='utf-8') as file:
+            json.dump(self.history_user, file, ensure_ascii=False, indent=4)
+
+        with open(self.history_system_path, 'w', encoding='utf-8') as file:
+            json.dump(self.history_system, file, ensure_ascii=False, indent=4)
 
     def chat(self, query):
-        self.history.append({"role": "user", "content": query})
+        self.history_user.append({"role": "user", "content": query})
         completion = self.client.chat.completions.create(
             model="moonshot-v1-8k",
-            messages=self.history,
+            messages=self.history_user + self.history_system,
             temperature=0.2,
         )
         result = completion.choices[0].message.content
-        self.history.append({"role": "assistant", "content": result})
+        self.history_user.append({"role": "assistant", "content": result})
         self.save_history()
         return result
 
@@ -47,12 +58,12 @@ def main():
             print("正在处理您的请求...")
             print(bot.chat(user_input))
 
-            # 等待两秒钟
-            start_time = time.time()
-            while time.time() - start_time < 5:
-                if input():  # 如果用户输入，则提醒稍等
-                    print("稍等...")
-            print("可以继续谈话啦")
+            # # 等待两秒钟
+            # start_time = time.time()
+            # while time.time() - start_time < 5:
+            #     if input():  # 如果用户输入，则提醒稍等
+            #         print("稍等...")
+            # print("可以继续谈话啦")
 
 if __name__ == '__main__':
     main()

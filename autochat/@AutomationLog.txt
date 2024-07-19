@@ -1,4 +1,0 @@
-2024-07-17 16:16:41.779 get_info_qq.py[4] <module> -> Find Control Timeout(10s): {ControlType: EditControl}
-2024-07-17 16:17:21.987 get_info_qq.py[4] <module> -> Find Control Timeout(10s): {ControlType: EditControl}
-2024-07-17 16:18:20.698 get_info_qq.py[4] <module> -> Find Control Timeout(10s): {ControlType: EditControl}
-2024-07-17 16:20:51.660 get_info_qq.py[4] <module> -> Find Control Timeout(10s): {ControlType: EditControl}

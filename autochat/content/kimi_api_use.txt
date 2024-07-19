@@ -1,0 +1,29 @@
+kimi:sk-ZaBn9vmW67ToxLxzWxGOWPa0OgGkfyR4bmrOlmKJSWYXgHX3
+    sk-HQ3jfk9IDN8zG1pWXICyY3MnZ7dEa4nOdL4D9faZfMpbbGgj
+moonshot-v1:moonshot的文本生成模型
+moonshot-v1-8k: 它是一个长度为 8k 的模型，适用于生成短文本。
+moonshot-v1-32k: 它是一个长度为 32k 的模型，适用于生成长文本。
+moonshot-v1-128k: 它是一个长度为 128k 的模型，适用于生成超长文本
+504：超时5min
+429：超过速率限制
+速率限制：  并发、RPM（每分钟请求数）、TPM（每分钟 Token 数，1Token大约1.5-2个汉字）、TPD（每天 Token 数）
+
+
+请求内容：
+{
+    "model": "moonshot-v1-8k",
+    "messages": [
+        {
+            "role": "system",
+            "content": "你是 Kimi，由 Moonshot AI 提供的人工智能助手，你更擅长中文和英文的对话。你会为用户提供安全，有帮助，准确的回答。同时，你会拒绝一切涉及恐怖主义，种族歧视，黄色暴力等问题的回答。Moonshot AI 为专有名词，不可翻译成其他语言。"
+        },
+        { "role": "user", "content": "你好，我叫李雷，1+1等于多少？" }
+    ],
+    "temperature": 0.3
+}
+messages:user/assistant/system   must
+model:8k/32k/128k    must
+max_tokens:输出长度tokens，如8k模型则不能超过8192-输入tokens
+temperature:[0,1],推荐0.3,较高的值输出更加随机
+partial: {"role": "assistant", "content": leading_text, "partial": True}引导输出的内容，引导输出的内容会少leading_text，需要手动添加
+[{"role": "assistant", "content": "尊敬的用户您好", "partial": True, "name": "张建领"}],

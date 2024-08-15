@@ -1368,19 +1368,181 @@ int main() {
 
 ## N皇后问题
 
+# 华为笔试准备
 
+- 判断一个字符串能否转换为数字
 
-# 计算机网络
+  - std::stoi,std::stod等函数，通过捕获异常判断是否成功
 
-[网络出现故障后最常用的11个网络命令，有你用的那个吗？_影响网络质量的网络命令-CSDN博客](https://blog.csdn.net/qq_23930765/article/details/120399448)
+    - ```c++
+      #include <iostream>
+      #include <string>
+      #include <stdexcept>
+      bool isNumber(const std::string& str) {
+          try {
+              size_t pos;
+              double num = std::stod(str, &pos);
+              return pos == str.size(); // 确保整个字符串都被转换
+          } catch (const std::invalid_argument& e) {
+              return false;
+          } catch (const std::out_of_range& e) {
+              return false;
+          }
+      }
+      //这里pos会指向第一个未被转换的字符的位置，因此要求str以数字开头，也可以不使用pos
+      int main() {
+          std::string str1 = "123.45";
+          std::string str2 = "abc123";
+          if (isNumber(str1)) {
+              std::cout << str1 << " 可以转换成数字" << std::endl;
+          } else {
+              std::cout << str1 << " 不能转换成数字" << std::endl;
+          }
+          if (isNumber(str2)) {
+              std::cout << str2 << " 可以转换成数字" << std::endl;
+          } else {
+              std::cout << str2 << " 不能转换成数字" << std::endl;
+          }
+          return 0;
+      }
+      ```
 
-- ipconfig   本机IP
-  - ipconfig /all 完整信息，包括物理地址
-  - ipconfig /release 释放IP
-  - ipconfig /renew 重新获取IP
-- nslookup   查询DNS信息，测试域名解析是否正常	结合防火墙可以禁止访问域名
-- ping   测试主机连通性	ping 127.0.01 检验TCP/IP协议安装
-- tracert   经过路径	
-- pathping   结合ping和tracert
+  - stringstream判断
 
-[经典面试题：在浏览器地址栏输入一个 URL 后回车，背后发生了什么-腾讯云开发者社区-腾讯云 (tencent.com)](https://cloud.tencent.com/developer/article/1793846)
+    - ```c++
+      #include <iostream>
+      #include <sstream>
+      #include <string>
+      bool isNumber(const std::string& str) {
+          std::istringstream iss(str);
+          double num;
+          iss >> num;
+          return iss.eof() && !iss.fail();
+      }
+      int main() {
+          std::string str1 = "123.45";
+          std::string str2 = "abc123";
+      
+          if (isNumber(str1)) {
+              std::cout << str1 << " 可以转换成数字" << std::endl;
+          } else {
+              std::cout << str1 << " 不能转换成数字" << std::endl;
+          }
+          if (isNumber(str2)) {
+              std::cout << str2 << " 可以转换成数字" << std::endl;
+          } else {
+              std::cout << str2 << " 不能转换成数字" << std::endl;
+          }
+          return 0;
+      }
+      ```
+
+  - 正则表达式
+
+    - ```c++
+      #include <iostream>
+      #include <regex>
+      #include <string>
+      bool isNumber(const std::string& str) {
+          std::regex pattern("^[-+]?[0-9]*\\.?[0-9]+([eE][-+]?[0-9]+)?$");
+          return std::regex_match(str, pattern);
+      }
+      int main() {
+          std::string str1 = "123.45";
+          std::string str2 = "abc123";
+      
+          if (isNumber(str1)) {
+              std::cout << str1 << " 可以转换成数字" << std::endl;
+          } else {
+              std::cout << str1 << " 不能转换成数字" << std::endl;
+          }
+          if (isNumber(str2)) {
+              std::cout << str2 << " 可以转换成数字" << std::endl;
+          } else {
+              std::cout << str2 << " 不能转换成数字" << std::endl;
+          }
+          return 0;
+      }
+      ```
+
+- for_each传入多个参数
+
+  - lambda表达式
+
+    - ```c++
+      #include <iostream>
+      #include <vector>
+      #include <algorithm> // std::for_each
+      // 定义一个简单的函数，用于打印元素
+      void printElement(int element, string &extraParam) {
+          std::cout << element << " (" << extraParam << ") ";
+      }
+      int main() {
+          std::vector<int> vec = {1, 2, 3, 4, 5};
+          int extraParam = 10;
+          // 使用 lambda 表达式捕获 extraParam 并传递给 printElement
+          std::for_each(vec.begin(), vec.end(), [&extraParam](int element) {
+              printElement(element, extraParam);
+          });
+          return 0;
+      }
+      //注意引用的位置
+      ```
+
+  - 函数对象
+
+    - ```c++
+      #include <iostream>
+      #include <vector>
+      #include <algorithm> // std::for_each
+      // 定义一个函数对象，用于打印元素
+      class PrintElement {
+      public:
+          PrintElement(int extraParam) : extraParam(extraParam) {}
+      
+          void operator()(int element) const {
+              std::cout << element << " (" << extraParam << ") ";
+          }
+      private:
+          int extraParam;
+      };
+      int main() {
+          std::vector<int> vec = {1, 2, 3, 4, 5};
+          int extraParam = 10;
+          // 使用函数对象传递 extraParam
+          std::for_each(vec.begin(), vec.end(), PrintElement(extraParam));
+          return 0;
+      }
+      //PrintElement(extraParam)返回值是实例，是一个函数对象可以被调用，可以在for_each前提前创建
+      ```
+
+- 将字符串转换为数字（参考--判断一个字符串能否转换为数字）
+
+  - std::stoi  std::stod  std::stol  std::stof
+  - stringstream提取
+
+- 函数和函数对象的区别
+
+  - 函数对象通过定义一个类，并重载函数调用运算符operator()来实现
+
+  - ```c++
+    class PrintElement {
+    public:
+        void operator()(int element) const {
+            std::cout << element << " ";
+        }
+    };
+    
+    class Incrementor {
+    public:
+        Incrementor(int step) : step(step) {}
+    
+        void operator()(int& value) const {
+            value += step;
+        }
+    private:
+        int step;
+    };
+    ```
+
+  - 函数对象使用时需要先创建一个函数对象，然后通过对象调用operator

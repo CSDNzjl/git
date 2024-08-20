@@ -1902,5 +1902,18 @@ int main() {
         return 0;
     }
     ```
+- delete和free的区别
+  - new做两件事，一是分配内存，二是调用类的构造函数；同样，delete会调用类的析构函数和释放内存。而malloc和free只是分配和释放内存。（对于类或结构体来说）
+  - 相比于malloc和free分别调用构造函数和析构函数
+  - 会递归调用，可以编译运行报错```c++
+    struct Object{
+    	Object(int i):data(i){}
+    	~Object(){
+	delete this;//等价于this->~Object();free(this);
+    	}
+    	int data;
+	}
+	 ```
+  - 
 
     

@@ -24,7 +24,7 @@
   - cin.get()  只能字符，cin.get(字符变量名)；cin.get(数组名，接收字符数目)；cin.get() 舍弃输入流中的一个字符
   - cin.getline()  cin.getline(变量名， 输入大小，自定义结束标志)
   - getline(cin,string s)  清除cin留下的结束符
-  - toupper(char)    tolower(char)
+  - toupper(char)    tolower(char)  返回类型是**int**，需要static_cast<char>(num)转换
 
 > 1.**string末尾无'\0'，字符数组有**，声明字符数组时要比预想的多设一位
 >
@@ -348,7 +348,7 @@ int main(){
   - 二叉搜索树：若它的左子树不空，则左子树上的所有结点的值均小于根节点的值；若它的右子树不空，则右子树上的所有结点的值均大于根节点的 值，左右子树分别为二叉排序树。
   - 平衡二叉树：左右两个子树的`高度差的绝对值不超过1`，并且左右两个子树都是平衡二叉树
 
-- 十进制转化为二进制
+- 十进制转化为二进制(整数)   除二取余，逆序排列；小数部分乘二取整，顺序排列
 
   - ```c++
     std::string decimalToBinary(int n) {
@@ -806,7 +806,7 @@ int main(){
 
 ## 8.2
 
-- to_string()将数字转换为字符  或者数字+'0'
+- to_string()将数字转换为字符  或者数字+'\0'
 
 - **贪心算法和动态规划的比较：**
   贪心算法是**自顶向下**求解，只能选择眼前对自己最有利的一步，其他的路径看不见。
@@ -947,7 +947,7 @@ int main(){
 
 # 小型结论
 
-- 简化代码：for_each()   sort()   lambda   find（也适用于找子字符串）   max_element  search
+- 简化代码：for_each()   sort()   lambda   find（也适用于找子字符串）   max_element  search   puts("");输出一个空行
 
   - ```cpp
     // 定义一个简单的函数，用于打印元素
@@ -983,7 +983,7 @@ int main(){
 
 - ***栈溢出，内存泄漏***
 - vector之间可以直接进行比较==,!=,>,<
-- Brian Kernighan算法（计算二进制中1的个数） KMP算法   Floyd判圈算法
+- Brian Kernighan算法（计算二进制中1的个数） KMP算法   Floyd判圈算法 牛顿迭代法
 - cin>>和getline()混用时一定要注意清除输入缓冲区的内容！！！
 - sizeof()  strlen() 区别（一般也只有字符数组用）
 - hex dec-Decimal oct bin-Binary
@@ -1667,27 +1667,7 @@ int main() {
     > - `std::regex_replace`：用于将匹配的子字符串替换为指定的字符串。
     > - **`std::regex_match` 进行匹配**：`std::regex_match` 函数用于检查字符串是否完全匹配正则表达式模式。
 
-- 回溯算法
-
-  - 递归一定有回溯
-
-  - **模板**：
-
-    ```c++
-    void backtracking(参数) {
-        if (终止条件) {
-            存放结果;
-            return;
-        }
-        for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
-            处理节点;
-            backtracking(路径，选择列表); // 递归
-            回溯，撤销处理结果
-        }
-    }
-    ```
-
-- char* array=“hello”指向的内容不能修改，因为一般指向字符串常量存储在**只读**内存区域
+- char* array=“hello”指向的内容不能修改，因为一般指向**字符串常量存储在只读内存区域**
 
   - char array[] = "hello";    **char *array = "hello";**   char *array = new char[6]; int *ptr = &a
   - []在**栈上**分配内存，可以修改字符串内容，动态内存分配new也可以修改
@@ -1734,3 +1714,193 @@ int main() {
     MyClass autoStringObject = MyClass<std::string>("Hello");
     ```
 
+- ```c++
+  int num = 65;  // ASCII码为65的字符是'A'
+  char ch = static_cast<char>(num);  // ch的值为'A'
+  
+  int num = 123;
+  string str = to_string(num);  // str的值为"123"
+  ```
+
+- 牛顿迭代法
+
+  - ```c++
+    #include <iostream>
+    #include <cmath>
+    double cubeRoot(double a, double epsilon = 1e-10) {
+        double x = a; // 初始猜测值
+        while (true) {
+            double nextX = (2 * x + a / (x * x)) / 3;
+            if (std::abs(nextX - x) < epsilon) {
+                return nextX;
+            }
+            x = nextX;
+        }
+    }
+    int main() {
+        double number;
+        std::cout << "请输入一个数: ";
+        std::cin >> number;
+        double cubeRootValue = cubeRoot(number);
+        std::cout << "该数的立方根是: " << cubeRootValue << std::endl;
+        return 0;
+    }
+    ```
+
+  - \section{示例}
+
+    假设我们要用牛顿迭代法求解方程 $ x^3 - a = 0 $ 的根，其中 $ a $ 是一个常数。这个方程的根就是 $ a $ 的立方根。
+
+    1. \textbf{函数和导数}：
+       - 函数 $ f(x) = x^3 - a $
+       - 导数 $ f'(x) = 3x^2 $
+
+    2. \textbf{迭代公式}：
+       $ x_{n+1} = x_n - \frac{x_n^3 - a}{3x_n^2} = x_n - \frac{x_n^3 - a}{3x_n^2} = x_n - \frac{x_n}{3} + \frac{a}{3x_n^2} = \frac{2x_n}{3} + \frac{a}{3x_n^2} $
+
+    3. \textbf{初始猜测值}：选择一个初始猜测值 $ x_0 $，例如 $ x_0 = a $。
+
+    4. \textbf{迭代过程}：
+       - 计算 $ x_1 = \frac{2x_0}{3} + \frac{a}{3x_0^2} $
+       - 计算 $ x_2 = \frac{2x_1}{3} + \frac{a}{3x_1^2} $
+       - 继续迭代，直到满足收敛条件。
+
+    \end{document}
+
+  - 设置输出精度：cout<<**fixed**<<setprecison(1)<<number  输出保留一位小数（定点格式）
+
+  - cout<<setprecision(1)<<number  输出保留一位有效数字 **setprecision在<iomanip>**
+
+- DFS与回溯   回溯法一般用于生成**所有可能的解**，动态规划生成**最优解**
+
+  - [C++基础算法之DFS与回溯_c++ dfs-CSDN博客](https://blog.csdn.net/qq_74729280/article/details/138139706?ops_request_misc=%7B%22request%5Fid%22%3A%22172412143216800178589960%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&request_id=172412143216800178589960&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-2-138139706-null-null.142^v100^pc_search_result_base8&utm_term=C%2B%2B dfs&spm=1018.2226.3001.4187)
+
+  - [迷宫问题_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/cf24906056f4488c9ddb132f317e03bc?tpId=37&rp=1&ru=%2Fexam%2Foj%2Fta&qru=%2Fexam%2Foj%2Fta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37&difficulty=&judgeStatus=&tags=5051&title=&gioEnter=menu)
+
+  - [火车进站_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/97ba57c35e9f4749826dc3befaeae109?tpId=37&tqId=21300&rp=1&ru=/exam/oj/ta&qru=/exam/oj/ta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37%3Ftag%3D1263&difficulty=3&judgeStatus=undefined&tags=&title=)
+
+  - ```c++
+    void backtracking(参数) {
+        if (终止条件) {
+            存放结果;
+            return;
+        }
+        for (选择：本层集合中元素（树中节点孩子的数量就是集合的大小）) {
+            处理节点;
+            backtracking(路径，选择列表); // 递归
+            回溯，==撤销==处理结果
+        }
+    }
+    ```
+
+- 二维vector
+
+  - 声明大小：vector<vector<int>> map(row, vector<int>(column));
+
+- 文件布局
+
+  - ```c++
+    // MyClass.h
+    #ifndef MYCLASS_H
+    #define MYCLASS_H
+    class MyClass {
+    private:
+        int privateVar; // 私有成员变量
+    public:
+        MyClass(); // 构造函数
+        ~MyClass(); // 析构函数
+        void publicMethod(); // 公共成员函数
+        int getPrivateVar(); // 访问私有成员的公共方法
+    };
+    #endif // MYCLASS_H
+    ```
+
+  - ```c++
+    // MyClass.cpp
+    #include "MyClass.h"
+    MyClass::MyClass() {
+        // 构造函数实现
+    }
+    MyClass::~MyClass() {
+        // 析构函数实现
+    }
+    void MyClass::publicMethod() {
+        // 成员函数实现
+    }
+    int MyClass::getPrivateVar() {
+        return privateVar;
+    }
+    ```
+
+  - ```c++
+    // main.cpp
+    #include "MyClass.h"
+    #include <iostream>
+    int main() {
+        MyClass myObject; // 创建MyClass的实例
+        myObject.publicMethod(); // 调用公共成员函数
+        int value = myObject.getPrivateVar(); // 访问私有成员变量
+        std::cout << "Private variable value: " << value << std::endl;
+        return 0;
+    }
+    ```
+
+- 类
+
+  - 类的数据成员不能在类的声明中初始化！！！
+
+  - 析构函数和构造函数都没有返回值
+
+  - 一个类中只能有一个析构函数
+
+  - 类成员变量默认为private
+
+  - public：对外可见，对内可见  private：对内可见（只能在类体的作用域内访问赋值）  protected：对内可见，对派生类可见
+
+  - 通过类名访问**静态类成员**：MyClass::num;       **静态成员函数**
+
+  - 静态类成员被所有类对象共享，只有一份
+
+  - 对于静态类成员，其类型可以是**当前类的类型**，而非静态类成员则不可以，除非数据成员的类型为当前类的指针或引用类型（关键看需不需要一个实例）
+
+    - ```c++
+      class CBook{
+      public:
+          CBook m_book;		//false
+          static CBook m_VCBook;//true
+          CBook *m_pBook;		//true
+      }
+      ```
+
+    - 静态类成员可以作为**成员函数的默认参数**，非静态不可以
+
+  - 类的静态成员函数只能访问类的静态成员变量，不能访问普通的数据成员（因为静态成员函数属于类而不属于任何一个实例，无法得到实例的数据成员，没有this指针）
+
+  - 友元  一般都在public下声明
+
+    - 友元函数  friend int function(int num);  然后在类外实现
+    - 友元类   friend class MyClass;  MyClass可以访问该类的私有成员
+    - 友元方法   friend void MyClass::OutPut();   MyClass中的OutPut方法可以访问私有成员
+
+- 命名空间
+
+  - ```c++
+    namespace MyLibrary {
+        void print() {
+            std::cout << "Hello from MyLibrary!" << std::endl;
+        }
+    }
+    int main() {
+        // 使用命名空间名称作为前缀来调用函数
+        MyLibrary::print();
+        // 使用using声明来引入特定的名称
+        using MyLibrary::print;
+        print(); // 直接调用，无需前缀
+        // 使用using namespace声明来引入整个命名空间
+        using namespace MyLibrary;
+        print(); // 直接调用，无需前缀
+        return 0;
+    }
+    ```
+
+    

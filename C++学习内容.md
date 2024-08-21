@@ -1002,20 +1002,20 @@ int main(){
 #include <cassert>
 using namespace std;
 
-void bubblesort(vector<int>& v)
-{
-    int length=v.size();
-    for(int j=length-1;j>0;j--)
-    {
-        int i=0;
-        while(i<j)
-        {
-            if(v[i]>v[j]) swap(v[i],v[j]);
-            i++;
+// 冒泡排序函数
+void bubbleSort(std::vector<int>& arr) {
+    int n = arr.size();
+    for (int i = 0; i < n - 1; ++i) {
+        for (int j = 0; j < n - 1 - i; ++j) {
+            if (arr[j] > arr[j + 1]) {
+                // 交换arr[j]和arr[j + 1]
+                std::swap(arr[j], arr[j + 1]);
+            }
         }
     }
 }
-void insertsort(vector<int>& v)
+
+void insertsort(vector<int>& v)  //插入排序不是swap！！！
 {
     int length=v.size();
     if(length==1) return;
@@ -1373,7 +1373,7 @@ int main() {
 1. 数组
 2. 字符串
 3. 排序
-4. 贪心
+4. **贪心**
 5. 递归
 6. 循环
 7. 滑窗
@@ -1399,8 +1399,8 @@ int main() {
 9. 双指针
 10. **回溯**   只要有递归就一定有回溯
 11. 状态机
-12. 并查集
-13. **正则表达式**
+12. **并查集**
+13. 正则表达式
 14. 分治
 15. 枚举
 16. 统计
@@ -1905,15 +1905,22 @@ int main() {
 - delete和free的区别
   - new做两件事，一是分配内存，二是调用类的构造函数；同样，delete会调用类的析构函数和释放内存。而malloc和free只是分配和释放内存。（对于类或结构体来说）
   - 相比于malloc和free分别调用构造函数和析构函数
-  - 会递归调用，可以编译运行报错```c++
-    struct Object{
-    	Object(int i):data(i){}
-    	~Object(){
-	delete this;//等价于this->~Object();free(this);
-    	}
-    	int data;
-	}
-	 ```
-  - 
+  - 会递归调用，可以编译但运行报错
+   ```c++
+  struct Object{
+  	Object(int i):data(i){}
+		~Object(){
+      delete this;//等价于this->~Object();free(this);
+  	}
+		int data;
+	}  
 
-    
+- 动态规划    ==怎么区分动态规划和回溯问题？？？==
+  - [C++之动态规划（动态规划入门）_c++动态规划-CSDN博客](https://blog.csdn.net/m0_62755690/article/details/121142019)
+  - [【0-1背包问题 】详细解析+图解+详细代码-CSDN博客](https://blog.csdn.net/qq_40802813/article/details/119579370)
+  - 关键：**状态转移方程**   用空间换时间 ，**重叠子问题**
+  - 能用动态规划解决的问题一般也能用递归
+  - [走方格的方案数_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/e2a22f0305eb4f2f9846e7d644dba09b?tpId=37&tqId=21314&rp=1&ru=/exam/oj/ta&qru=/exam/oj/ta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37%3Ftag%3D1263&difficulty=2&judgeStatus=undefined&tags=&title=)
+  - [公共子串计算_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/98dc82c094e043ccb7e0570e5342dd1b?tpId=37&rp=1&ru=%2Fexam%2Foj%2Fta&qru=%2Fexam%2Foj%2Fta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37%3Ftag%3D1263&difficulty=3&judgeStatus=&tags=&title=&gioEnter=menu)
+- C++中全局变量和静态变量会初始化为0，但是局部变量不会，内容随机
+- **\#include <bits/stdc++.h>**包含了几乎所有标准库的头文件

@@ -1157,7 +1157,7 @@ int main() {
 
 ```
 
-## quicksort
+## quicksort   两个函数都有left<right
 
 ```c++
 #include <iostream>
@@ -1365,8 +1365,6 @@ int main() {
     return 0;
 }
 ```
-
-## N皇后问题
 
 # 华为笔试准备
 
@@ -1918,9 +1916,33 @@ int main() {
 - 动态规划    ==怎么区分动态规划和回溯问题？？？==
   - [C++之动态规划（动态规划入门）_c++动态规划-CSDN博客](https://blog.csdn.net/m0_62755690/article/details/121142019)
   - [【0-1背包问题 】详细解析+图解+详细代码-CSDN博客](https://blog.csdn.net/qq_40802813/article/details/119579370)
-  - 关键：**状态转移方程**   用空间换时间 ，**重叠子问题**
+  - [C++动态规划详解-CSDN博客](https://blog.csdn.net/weixin_51951103/article/details/120241450)
+  - 关键：**状态转移方程** 状态变量  用空间换时间 ，**重叠子问题**，无后效性
   - 能用动态规划解决的问题一般也能用递归
   - [走方格的方案数_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/e2a22f0305eb4f2f9846e7d644dba09b?tpId=37&tqId=21314&rp=1&ru=/exam/oj/ta&qru=/exam/oj/ta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37%3Ftag%3D1263&difficulty=2&judgeStatus=undefined&tags=&title=)
   - [公共子串计算_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/98dc82c094e043ccb7e0570e5342dd1b?tpId=37&rp=1&ru=%2Fexam%2Foj%2Fta&qru=%2Fexam%2Foj%2Fta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37%3Ftag%3D1263&difficulty=3&judgeStatus=&tags=&title=&gioEnter=menu)
+  - 递推和记忆化搜索
+    - 递推是一种**自底向上**的方法，从已知的最小问题开始，逐步解决更大的问题，直到解决最终的问题。（常用）
+    - 记忆化搜索是一种**自顶向下**的方法，通过**递归**解决大问题，并将中间结果存储起来以避免重复计算。
 - C++中全局变量和静态变量会初始化为0，但是局部变量不会，内容随机
 - **\#include <bits/stdc++.h>**包含了几乎所有标准库的头文件
+- mergesort和quicksort的主函数一定都要加判断**if (left<right)!!!!**
+
+- 最大公因子gcd求法   辗转相除法   最小公倍数可以用**a*b/gcd(a,b)**求解
+
+  - ```c++
+    int gcd(int a,int b)
+    {
+    	if(a<b)
+    	{
+    		swap(a,b);
+    	}
+    	if(b==0)
+    	{
+    		return a;
+    	}
+    	return gcd(b,a%b); 
+    } 
+    ```
+
+    

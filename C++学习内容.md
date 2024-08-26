@@ -444,7 +444,7 @@ int main(){
       
       ```
 
-- Brian Kernighan算法
+- Brian Kernighan算法    也可以使用移位运算符
 
   - 用于计算一个整数的二进制表示中1的个数的有效方法
 
@@ -457,6 +457,15 @@ int main(){
           }
           return count;
       }
+      //计算末尾连续的1
+      int last_1(int n){
+              int count=0;
+              while((n & 1)==1){
+                  count++;
+                  n=n>>1;
+              }
+              return count;
+          }
       ```
 
 - 位运算奇妙结论
@@ -1496,6 +1505,8 @@ int main() {
           }
           return 0;
       }
+      
+      regex_match(&c, &c + 1, pattern)//匹配单个字符！！！
       ```
 
 - for_each传入多个参数
@@ -1900,6 +1911,7 @@ int main() {
         return 0;
     }
     ```
+  
 - delete和free的区别
   - new做两件事，一是分配内存，二是调用类的构造函数；同样，delete会调用类的析构函数和释放内存。而malloc和free只是分配和释放内存。（对于类或结构体来说）
   - 相比于malloc和free分别调用构造函数和析构函数
@@ -1914,18 +1926,30 @@ int main() {
 	}  
 
 - 动态规划    ==怎么区分动态规划和回溯问题？？？==
+  
+  - [ACM 金牌选手教你动态规划的本质。力扣 No.72 编辑距离，真·动画教编程，适合语言初学者或编程新人。_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1FJ4m1M7RJ/?spm_id_from=333.788&vd_source=8b8b2b5a21f99c988184d3ef69173eac)==我的神！！！！！==
   - [C++之动态规划（动态规划入门）_c++动态规划-CSDN博客](https://blog.csdn.net/m0_62755690/article/details/121142019)
   - [【0-1背包问题 】详细解析+图解+详细代码-CSDN博客](https://blog.csdn.net/qq_40802813/article/details/119579370)
   - [C++动态规划详解-CSDN博客](https://blog.csdn.net/weixin_51951103/article/details/120241450)
-  - 关键：**状态转移方程** 状态变量  用空间换时间 ，**重叠子问题**，无后效性
+  - 关键：**状态转移方程** **状态变量**  用空间换时间 ，重叠子问题，无后效性
   - 能用动态规划解决的问题一般也能用递归
   - [走方格的方案数_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/e2a22f0305eb4f2f9846e7d644dba09b?tpId=37&tqId=21314&rp=1&ru=/exam/oj/ta&qru=/exam/oj/ta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37%3Ftag%3D1263&difficulty=2&judgeStatus=undefined&tags=&title=)
   - [公共子串计算_牛客题霸_牛客网 (nowcoder.com)](https://www.nowcoder.com/practice/98dc82c094e043ccb7e0570e5342dd1b?tpId=37&rp=1&ru=%2Fexam%2Foj%2Fta&qru=%2Fexam%2Foj%2Fta&sourceUrl=%2Fexam%2Foj%2Fta%3Fdifficulty%3D3%26page%3D1%26pageSize%3D50%26search%3D%26tpId%3D37%26type%3D37%3Ftag%3D1263&difficulty=3&judgeStatus=&tags=&title=&gioEnter=menu)
   - 递推和记忆化搜索
-    - 递推是一种**自底向上**的方法，从已知的最小问题开始，逐步解决更大的问题，直到解决最终的问题。（常用）
+    - 递推是一种**自底向上**的方法，从已知的最小问题开始，逐步解决更大的问题，直到解决最终的问题。**（常用）**
     - 记忆化搜索是一种**自顶向下**的方法，通过**递归**解决大问题，并将中间结果存储起来以避免重复计算。
+  - **动态规划五步法**
+    - **构造问题**
+    - **拆解子问题（状态变量）**
+    - **求解简单子问题**
+    - **通过已知问题来求解（状态转移方程）**
+    - **判断复杂度**
+  - ==动态规划的状态转移压缩==
+  
 - C++中全局变量和静态变量会初始化为0，但是局部变量不会，内容随机
+
 - **\#include <bits/stdc++.h>**包含了几乎所有标准库的头文件
+
 - mergesort和quicksort的主函数一定都要加判断**if (left<right)!!!!**
 
 - 最大公因子gcd求法   辗转相除法   最小公倍数可以用**a*b/gcd(a,b)**求解
@@ -1945,4 +1969,12 @@ int main() {
     } 
     ```
 
-    
+- ```cpp
+  #include <bitset>
+  ```
+
+  - `bitset<32> bst(num);` 这行代码创建了一个包含32位的位集合（bitset），并用变量`num`的值来初始化这个位集合。`num`可以是一个整数类型（如`int`、`unsigned int`等），位集合会根据`num`的值来设置相应的位。
+
+    例如，如果`num`的值是5，那么`bitset<32> bst(5);`会创建一个位集合，其中最低的3位是101（二进制表示的5），其余位都是0。
+
+- 

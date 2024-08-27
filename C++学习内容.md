@@ -877,7 +877,9 @@ int main(){
     };
     //newhead是没啥用的，只用来辅助进行递归过程，不参与任何运算
     ```
-
+  
+  - **链表万金油技巧**
+    - **初始化一个根节点root指向链表头，同时把最后一个结点指向的空指针nullptr也标注出来**
 
 ## 7.23
 
@@ -1780,7 +1782,7 @@ int main() {
 
   - cout<<setprecision(1)<<number  输出保留一位有效数字 **setprecision在<iomanip>**
 
-- DFS与回溯   回溯法一般用于生成**所有可能的解**，动态规划生成**最优解**
+- DFS与回溯   回溯法一般用于生成**所有可能的解**，动态规划生成**最优解*
 
   - [C++基础算法之DFS与回溯_c++ dfs-CSDN博客](https://blog.csdn.net/qq_74729280/article/details/138139706?ops_request_misc=%7B%22request%5Fid%22%3A%22172412143216800178589960%22%2C%22scm%22%3A%2220140713.130102334..%22%7D&request_id=172412143216800178589960&biz_id=0&utm_medium=distribute.pc_search_result.none-task-blog-2~all~baidu_landing_v2~default-2-138139706-null-null.142^v100^pc_search_result_base8&utm_term=C%2B%2B dfs&spm=1018.2226.3001.4187)
 
@@ -1911,7 +1913,7 @@ int main() {
         return 0;
     }
     ```
-  
+
 - delete和free的区别
   - new做两件事，一是分配内存，二是调用类的构造函数；同样，delete会调用类的析构函数和释放内存。而malloc和free只是分配和释放内存。（对于类或结构体来说）
   - 相比于malloc和free分别调用构造函数和析构函数
@@ -1919,14 +1921,14 @@ int main() {
    ```c++
   struct Object{
   	Object(int i):data(i){}
-		~Object(){
+  	~Object(){
       delete this;//等价于this->~Object();free(this);
   	}
-		int data;
-	}  
+  	int data;
+  }  
 
 - 动态规划    ==怎么区分动态规划和回溯问题？？？==
-  
+
   - [ACM 金牌选手教你动态规划的本质。力扣 No.72 编辑距离，真·动画教编程，适合语言初学者或编程新人。_哔哩哔哩_bilibili](https://www.bilibili.com/video/BV1FJ4m1M7RJ/?spm_id_from=333.788&vd_source=8b8b2b5a21f99c988184d3ef69173eac)==我的神！！！！！==
   - [C++之动态规划（动态规划入门）_c++动态规划-CSDN博客](https://blog.csdn.net/m0_62755690/article/details/121142019)
   - [【0-1背包问题 】详细解析+图解+详细代码-CSDN博客](https://blog.csdn.net/qq_40802813/article/details/119579370)
@@ -1945,7 +1947,8 @@ int main() {
     - **通过已知问题来求解（状态转移方程）**
     - **判断复杂度**
   - ==动态规划的状态转移压缩==
-  
+  - 动态规划不一定是最优解 [3. 无重复字符的最长子串 - 力扣（LeetCode）](https://leetcode.cn/problems/longest-substring-without-repeating-characters/solutions/227999/wu-zhong-fu-zi-fu-de-zui-chang-zi-chuan-by-leetc-2/)（滑动窗口）
+
 - C++中全局变量和静态变量会初始化为0，但是局部变量不会，内容随机
 
 - **\#include <bits/stdc++.h>**包含了几乎所有标准库的头文件
@@ -1977,4 +1980,23 @@ int main() {
 
     例如，如果`num`的值是5，那么`bitset<32> bst(5);`会创建一个位集合，其中最低的3位是101（二进制表示的5），其余位都是0。
 
-- 
+- KMP算法
+
+  - 使用**前缀函数**，判断一个字符串（主串）中是否有模式串的存在
+  - 前缀函数：将一个字符串所有不包含自身的前缀与后缀列出，找到相等匹配的前后缀的长度最大值
+  - 过程：将模式串与主串用一个‘#’字符链接，计算合并串的前缀函数，如果有个前缀函数等于模式串的长度则找到
+  - 代码：
+
+    - ```c++
+      vector<int> pi(str.size());
+      for(int i=1;i<str.size();i++){
+          int len=pi[i-1];
+          while(len!=0 && str[i]!=str[len]){
+          	len=pi[len-1];
+      	}
+          if(str[i]==str[len]){
+              pi[i]=len+1;
+          }
+      }
+      ```
+  - [28. 找出字符串中第一个匹配项的下标 - 力扣（LeetCode）](https://leetcode.cn/problems/find-the-index-of-the-first-occurrence-in-a-string/description/)
